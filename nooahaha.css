@@ -35,6 +35,16 @@ noscript { display: none; }
   display: flex;
   flex-direction: column;
 }
+
+@media (max-width: 600px) {
+  .screen {
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    padding: 12.5px;
+  }
+}
 .header {
   display: grid;
   grid-template-columns: 1fr auto;
