@@ -1,0 +1,127 @@
+:root {
+  --bg: #ffffff;
+  --fg: #111111;
+  --link: #0055ff;
+  --border: #d9d9d9;
+  --about-border: #ffa417;
+  --writing-border: #ff5a3c;
+  --projects-border: #3ce1ff;
+  --talks-border: #48ff40;
+}
+* { box-sizing: border-box; }
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  line-height: 1.6;
+}
+a { color: var(--link); }
+.screen {
+  position: absolute;
+  top: 80px;
+  left: 80px;
+  right: 80px;
+  bottom: 80px;
+  padding: 50px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+  background: #fff;
+  overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+  margin-bottom: 28px;
+}
+.title {
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  font-size: 1.6em;
+  text-transform: uppercase;
+}
+.status {
+  font-size: 13px;
+  opacity: 0.7;
+  text-align: right;
+}
+nav {
+  grid-column: 1 / -1;
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  position: relative;
+}
+nav a {
+  padding: 6px 10px;
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--link);
+  text-transform: uppercase;
+  border: 2px solid transparent;
+  position: relative;
+  z-index: 1;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+/* Override per-link active borders to use a single moving indicator instead */
+nav a.active { border-color: transparent !important; }
+.nav-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 0;
+  transition: transform 250ms cubic-bezier(0.22, 1, 0.36, 1), width 250ms cubic-bezier(0.22, 1, 0.36, 1), height 250ms cubic-bezier(0.22, 1, 0.36, 1), border-color 200ms ease;
+  opacity: 0;
+}
+main p { margin-bottom: 20px; }
+main {flex: 1}
+main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
+#writing p, #projects p, #talks p { margin-bottom: 28px; }
+.footer {
+  margin-top: 36px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  opacity: 0.75;
+}
+.clicker {
+  display: inline-block;
+  width: 6px;
+  height: 1em;
+  background: var(--fg);
+  margin-left: 4px;
+  animation: blink 1s steps(1, end) infinite;
+  vertical-align: text-bottom;
+}
+@keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+.page { display: none; }
+.page { position: relative; }
+.page.active { display: block; }
+.page .content { position: relative; }
+#about p { margin-bottom: 28px; }
+/* Ensure section titles align with left edge of body text */
+.content h3, .content h4 {
+  margin: 0 0 16px 0;
+  padding-left: 0;
+  text-align: left;
+}
+.content p {
+  margin: 0 0 20px 0;
+} 

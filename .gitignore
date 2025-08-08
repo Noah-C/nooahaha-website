@@ -1,0 +1,12 @@
+# OS
+.DS_Store
+
+# Builds
+dist
+build
+
+# Node
+node_modules
+
+# Env
+.env
