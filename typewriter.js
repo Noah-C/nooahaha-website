@@ -1,7 +1,7 @@
 (() => {
-  const SPEED = 22;           // base ms per character
-  const PUNCT_PAUSE = 140;    // extra pause after . , ! ? ; :
-  const PARA_PAUSE = 240;     // pause between paragraphs
+  const SPEED = 18;           // base ms per character
+  const PUNCT_PAUSE = 120;    // extra pause after . , ! ? ; :
+  const PARA_PAUSE = 200;     // pause between paragraphs
   const SHOULD_REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function hasMotionOverride(){
