@@ -93,7 +93,7 @@ nav a.active { border-color: transparent !important; }
 main p { margin-bottom: 20px; }
 main {flex: 1}
 main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
-#writing p, #projects p, #talks p { margin-bottom: 28px; }
+#writing li, #projects p, #talks li { margin-bottom: 28px; }
 .footer {
   margin-top: 36px;
   padding-top: 16px;
