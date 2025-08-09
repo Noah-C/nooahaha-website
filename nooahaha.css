@@ -148,11 +148,17 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   }
 }
-.photo-grid img {
+.photo-grid .photo-wrap {
+  position: relative;
+  overflow: visible;
+}
+
+.photo-grid .photo-wrap img {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   display: block;
+
   position: relative;
   transition: transform 0.2s ease, object-fit 0.2s ease;
 }
