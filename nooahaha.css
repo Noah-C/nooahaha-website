@@ -155,36 +155,42 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
     display: block;
 }
 
-/* Retro project slider */
-.projects-frame {
-  border: 2px solid #808080;
-  background: #fff;
-  overflow: hidden;
-}
-.projects-slider {
+/* Retro tab switcher for projects */
+.project-tabs {
   display: flex;
-  transition: transform 300ms ease;
+  gap: 4px;
+  margin-bottom: 12px;
 }
-.project-pane {
-  flex: 0 0 100%;
-  padding: 16px;
-}
-.project-pane h3 {
-  display: flex;
-  align-items: center;
-  margin: 0 0 16px 0;
-}
-.project-next {
-  margin-left: 8px;
+.project-tabs button {
   background: #c0c0c0;
   border: 2px solid;
   border-color: #fff #808080 #808080 #fff;
+  padding: 4px 8px;
   cursor: pointer;
   font-family: inherit;
   font-size: 14px;
-  padding: 2px 6px;
 }
-.project-next:active {
+.project-tabs button.active {
   border-color: #808080 #fff #fff #808080;
   background: #e0e0e0;
+}
+.project-pane {
+  display: none;
+  border: 2px solid #808080;
+  padding: 16px;
+  background: #fff;
+}
+.project-pane.active {
+
+  display: block;
+
+  position: relative;
+  transition: transform 0.2s ease, object-fit 0.2s ease;
+}
+
+.photo-grid img:hover {
+  transform: scale(1.2);
+  object-fit: contain;
+  z-index: 1;
+
 }
