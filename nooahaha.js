@@ -94,6 +94,7 @@ function initProjectTabs(){
   const container = document.querySelector('.projects-window');
   if (!container || container.dataset.inited) return;
   container.dataset.inited = 'true';
+
   const panes = container.querySelectorAll('.project-pane');
   const switches = container.querySelectorAll('.project-switch');
   function show(id){
@@ -108,7 +109,6 @@ function initProjectTabs(){
   });
   if (panes[0]) show(panes[0].id);
 }
-
 async function loadSection(id){
   const sec = document.getElementById(id);
   if (!sec) return;
