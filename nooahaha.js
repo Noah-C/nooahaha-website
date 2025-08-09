@@ -98,7 +98,8 @@ function initProjectSlider(){
   let index = 0;
   function show(idx){
     index = (idx + panes.length) % panes.length;
-    slider.style.transform = `translateX(-${index * 100}%)`;
+    const offset = -index * frame.clientWidth;
+    slider.style.transform = `translateX(${offset}px)`;
     const activePane = panes[index];
     if (activePane.querySelector('#amb-photo-grid')) initAmbPhotoGrid();
   }
@@ -107,8 +108,10 @@ function initProjectSlider(){
       show(index + 1);
     }
   });
+  window.addEventListener('resize', () => show(index));
   show(0);
 }
+
 async function loadSection(id){
   const sec = document.getElementById(id);
   if (!sec) return;
