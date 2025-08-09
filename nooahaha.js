@@ -77,16 +77,18 @@ async function initAmbPhotoGrid(){
     }
     grid.innerHTML = '';
     selected.forEach(src => {
+      const wrap = document.createElement('div');
+      wrap.className = 'photo-wrap';
       const img = document.createElement('img');
       img.src = src;
       img.alt = 'Anderson Memorial Bridge photo';
-      grid.appendChild(img);
+      wrap.appendChild(img);
+      grid.appendChild(wrap);
     });
   } catch (err) {
     console.error(err);
   }
 }
-
 function initProjectSlider(){
   const frame = document.querySelector('.projects-frame');
   if (!frame || frame.dataset.inited) return;
