@@ -135,4 +135,16 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
 }
 .content p {
   margin: 0 0 20px 0;
-} 
+}
+
+/* Responsive photo grid for project images */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+.photo-grid img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
