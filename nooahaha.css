@@ -154,6 +154,7 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
     object-fit: cover;
     display: block;
 }
+
 /* Retro tab switcher for projects */
 .project-tabs {
   display: flex;
@@ -191,4 +192,5 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   transform: scale(1.2);
   object-fit: contain;
   z-index: 1;
+
 }

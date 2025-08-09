@@ -23,7 +23,7 @@ function updateNavIndicator(id){
 function sanitizeHTML(html){
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
-  const allowed = new Set(['p','a','em','strong','span','ul','ol','li','h1','h2','h3','h4','h5','h6','br','div','img']);
+  const allowed = new Set(['p','a','em','strong','span','ul','ol','li','h1','h2','h3','h4','h5','h6','br','div','img','button']);
   const walker = document.createTreeWalker(doc.body, NodeFilter.SHOW_ELEMENT);
   const toRemove = [];
   while (walker.nextNode()){
@@ -34,7 +34,7 @@ function sanitizeHTML(html){
       const name = attr.name.toLowerCase();
       if (name === 'href' && tag === 'a') {
         if (/^javascript:/i.test(attr.value)) el.removeAttribute(attr.name);
-      } else if (name.startsWith('on') || !['href','target','rel','class','id','src','alt','loading'].includes(name)) {
+      } else if (name.startsWith('on') || !(name.startsWith('data-') || ['href','target','rel','class','id','src','alt','loading'].includes(name))) {
         el.removeAttribute(attr.name);
       }
     });
@@ -89,34 +89,33 @@ async function initAmbPhotoGrid(){
     console.error(err);
   }
 }
-
-function initProjectTabs(){
-  const tabsContainer = document.querySelector('.project-tabs');
-  if (!tabsContainer || tabsContainer.dataset.inited) return;
-  tabsContainer.dataset.inited = 'true';
-  const tabs = tabsContainer.querySelectorAll('button');
-  const panes = document.querySelectorAll('.project-pane');
-  function activate(target){
-    tabs.forEach(btn => btn.classList.toggle('active', btn.dataset.project === target));
-    panes.forEach(pane => {
-      const active = pane.id === 'project-' + target;
-      pane.classList.toggle('active', active);
-      if (active && target === 'amb') initAmbPhotoGrid();
-    });
+function initProjectSlider(){
+  const frame = document.querySelector('.projects-frame');
+  if (!frame || frame.dataset.inited) return;
+  frame.dataset.inited = 'true';
+  const slider = frame.querySelector('.projects-slider');
+  const panes = slider.querySelectorAll('.project-pane');
+  let index = 0;
+  function show(idx){
+    index = (idx + panes.length) % panes.length;
+    slider.style.transform = `translateX(-${index * 100}%)`;
+    const activePane = panes[index];
+    if (activePane.querySelector('#amb-photo-grid')) initAmbPhotoGrid();
   }
-  tabs.forEach(btn => btn.addEventListener('click', () => activate(btn.dataset.project)));
-  if (tabs.length > 0) activate(tabs[0].dataset.project);
+  slider.addEventListener('click', e => {
+    if (e.target.classList.contains('project-next')) {
+      show(index + 1);
+    }
+  });
+  show(0);
 }
-
 async function loadSection(id){
   const sec = document.getElementById(id);
   if (!sec) return;
   if (sec.dataset.loading === 'true') return;
   if (sec.dataset.loaded === 'true') {
     if (id === 'projects') {
-      initProjectTabs();
-      const grid = document.getElementById('amb-photo-grid');
-      if (grid && grid.children.length === 0) initAmbPhotoGrid();
+      initProjectSlider();
     }
     return;
   }
@@ -129,7 +128,7 @@ async function loadSection(id){
     const html = await resp.text();
     const sanitized = sanitizeHTML(html);
     container.innerHTML = sanitized;
-    if (id === 'projects') initProjectTabs();
+    if (id === 'projects') initProjectSlider();
     sec.dataset.loaded = 'true';
   } catch (err) {
     container.innerHTML = `<p style="color:#c00">Failed to load content.</p>`;
