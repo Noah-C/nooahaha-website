@@ -82,6 +82,7 @@ async function initAmbPhotoGrid(){
       const img = document.createElement('img');
       img.src = src;
       img.alt = 'Anderson Memorial Bridge photo';
+      img.loading = 'lazy';
       wrap.appendChild(img);
       grid.appendChild(wrap);
     });
@@ -89,35 +90,31 @@ async function initAmbPhotoGrid(){
     console.error(err);
   }
 }
-
 function initProjectTabs(){
   const container = document.querySelector('.projects-window');
   if (!container || container.dataset.inited) return;
   container.dataset.inited = 'true';
-  const tabs = container.querySelectorAll('.project-tab');
+
   const panes = container.querySelectorAll('.project-pane');
+  const switches = container.querySelectorAll('.project-switch');
   function show(id){
     panes.forEach(p => {
       const active = p.id === id;
       p.classList.toggle('active', active);
       if (active && p.id === 'amb') initAmbPhotoGrid();
     });
-    tabs.forEach(t => t.classList.toggle('active', t.dataset.target === id));
   }
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => show(tab.dataset.target));
+  switches.forEach(sw => {
+    sw.addEventListener('click', () => show(sw.dataset.target));
   });
-  if (tabs[0]) show(tabs[0].dataset.target);
-
+  if (panes[0]) show(panes[0].id);
 }
-
 async function loadSection(id){
   const sec = document.getElementById(id);
   if (!sec) return;
   if (sec.dataset.loading === 'true') return;
   if (sec.dataset.loaded === 'true') {
     if (id === 'projects') {
-
       initProjectTabs();
     }
     return;
