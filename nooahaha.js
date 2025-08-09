@@ -89,27 +89,26 @@ async function initAmbPhotoGrid(){
     console.error(err);
   }
 }
-function initProjectSlider(){
-  const frame = document.querySelector('.projects-frame');
-  if (!frame || frame.dataset.inited) return;
-  frame.dataset.inited = 'true';
-  const slider = frame.querySelector('.projects-slider');
-  const panes = slider.querySelectorAll('.project-pane');
-  let index = 0;
-  function show(idx){
-    index = (idx + panes.length) % panes.length;
-    const offset = -index * frame.clientWidth;
-    slider.style.transform = `translateX(${offset}px)`;
-    const activePane = panes[index];
-    if (activePane.querySelector('#amb-photo-grid')) initAmbPhotoGrid();
+
+function initProjectTabs(){
+  const container = document.querySelector('.projects-window');
+  if (!container || container.dataset.inited) return;
+  container.dataset.inited = 'true';
+  const tabs = container.querySelectorAll('.project-tab');
+  const panes = container.querySelectorAll('.project-pane');
+  function show(id){
+    panes.forEach(p => {
+      const active = p.id === id;
+      p.classList.toggle('active', active);
+      if (active && p.id === 'amb') initAmbPhotoGrid();
+    });
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.target === id));
   }
-  slider.addEventListener('click', e => {
-    if (e.target.classList.contains('project-next')) {
-      show(index + 1);
-    }
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => show(tab.dataset.target));
   });
-  window.addEventListener('resize', () => show(index));
-  show(0);
+  if (tabs[0]) show(tabs[0].dataset.target);
+
 }
 
 async function loadSection(id){
@@ -118,7 +117,8 @@ async function loadSection(id){
   if (sec.dataset.loading === 'true') return;
   if (sec.dataset.loaded === 'true') {
     if (id === 'projects') {
-      initProjectSlider();
+
+      initProjectTabs();
     }
     return;
   }
@@ -131,7 +131,7 @@ async function loadSection(id){
     const html = await resp.text();
     const sanitized = sanitizeHTML(html);
     container.innerHTML = sanitized;
-    if (id === 'projects') initProjectSlider();
+    if (id === 'projects') initProjectTabs();
     sec.dataset.loaded = 'true';
   } catch (err) {
     container.innerHTML = `<p style="color:#c00">Failed to load content.</p>`;
