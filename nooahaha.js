@@ -89,12 +89,35 @@ async function initAmbPhotoGrid(){
     console.error(err);
   }
 }
+
+function initProjectTabs(){
+  const tabsContainer = document.querySelector('.project-tabs');
+  if (!tabsContainer || tabsContainer.dataset.inited) return;
+  tabsContainer.dataset.inited = 'true';
+  const tabs = tabsContainer.querySelectorAll('button');
+  const panes = document.querySelectorAll('.project-pane');
+  function activate(target){
+    tabs.forEach(btn => btn.classList.toggle('active', btn.dataset.project === target));
+    panes.forEach(pane => {
+      const active = pane.id === 'project-' + target;
+      pane.classList.toggle('active', active);
+      if (active && target === 'amb') initAmbPhotoGrid();
+    });
+  }
+  tabs.forEach(btn => btn.addEventListener('click', () => activate(btn.dataset.project)));
+  if (tabs.length > 0) activate(tabs[0].dataset.project);
+}
+
 async function loadSection(id){
   const sec = document.getElementById(id);
   if (!sec) return;
   if (sec.dataset.loading === 'true') return;
   if (sec.dataset.loaded === 'true') {
-    if (id === 'projects') initAmbPhotoGrid();
+    if (id === 'projects') {
+      initProjectTabs();
+      const grid = document.getElementById('amb-photo-grid');
+      if (grid && grid.children.length === 0) initAmbPhotoGrid();
+    }
     return;
   }
   const container = sec.querySelector('.content');
@@ -106,7 +129,7 @@ async function loadSection(id){
     const html = await resp.text();
     const sanitized = sanitizeHTML(html);
     container.innerHTML = sanitized;
-    if (id === 'projects') initAmbPhotoGrid();
+    if (id === 'projects') initProjectTabs();
     sec.dataset.loaded = 'true';
   } catch (err) {
     container.innerHTML = `<p style="color:#c00">Failed to load content.</p>`;
