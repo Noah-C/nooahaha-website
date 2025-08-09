@@ -69,9 +69,11 @@ async function initAmbPhotoGrid(){
       shuffle(images);
       selected = images.slice(0, 36);
     } else {
-      const pool = [];
-      while (pool.length < 36) pool.push(...images);
-      selected = pool.slice(0, 36);
+      selected = [];
+      for (let i = 0; i < 36; i++) {
+        const idx = Math.floor(Math.random() * images.length);
+        selected.push(images[idx]);
+      }
     }
     grid.innerHTML = '';
     selected.forEach(src => {
