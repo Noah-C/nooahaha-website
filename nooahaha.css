@@ -137,14 +137,20 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   margin: 0 0 20px 0;
 }
 
-/* Responsive photo grid for project images */
+/* Responsive 6x6 photo grid for project images */
 .photo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+@media (max-width: 800px) {
+  .photo-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
 }
 .photo-grid img {
   width: 100%;
-  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
   display: block;
 }
