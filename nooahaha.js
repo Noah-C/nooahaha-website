@@ -23,7 +23,7 @@ function updateNavIndicator(id){
 function sanitizeHTML(html){
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
-  const allowed = new Set(['p','a','em','strong','span','ul','ol','li','h1','h2','h3','h4','h5','h6','br','div','img']);
+  const allowed = new Set(['p','a','em','strong','span','ul','ol','li','h1','h2','h3','h4','h5','h6','br','div','img','button']);
   const walker = document.createTreeWalker(doc.body, NodeFilter.SHOW_ELEMENT);
   const toRemove = [];
   while (walker.nextNode()){
@@ -34,7 +34,7 @@ function sanitizeHTML(html){
       const name = attr.name.toLowerCase();
       if (name === 'href' && tag === 'a') {
         if (/^javascript:/i.test(attr.value)) el.removeAttribute(attr.name);
-      } else if (name.startsWith('on') || !['href','target','rel','class','id','src','alt','loading'].includes(name)) {
+      } else if (name.startsWith('on') || !(name.startsWith('data-') || ['href','target','rel','class','id','src','alt','loading'].includes(name))) {
         el.removeAttribute(attr.name);
       }
     });
@@ -77,21 +77,46 @@ async function initAmbPhotoGrid(){
     }
     grid.innerHTML = '';
     selected.forEach(src => {
+      const wrap = document.createElement('div');
+      wrap.className = 'photo-wrap';
       const img = document.createElement('img');
       img.src = src;
       img.alt = 'Anderson Memorial Bridge photo';
-      grid.appendChild(img);
+      img.loading = 'lazy';
+      wrap.appendChild(img);
+      grid.appendChild(wrap);
     });
   } catch (err) {
     console.error(err);
   }
 }
+function initProjectTabs(){
+  const container = document.querySelector('.projects-window');
+  if (!container || container.dataset.inited) return;
+  container.dataset.inited = 'true';
+  const panes = container.querySelectorAll('.project-pane');
+  const switches = container.querySelectorAll('.project-switch');
+  function show(id){
+    panes.forEach(p => {
+      const active = p.id === id;
+      p.classList.toggle('active', active);
+      if (active && p.id === 'amb') initAmbPhotoGrid();
+    });
+  }
+  switches.forEach(sw => {
+    sw.addEventListener('click', () => show(sw.dataset.target));
+  });
+  if (panes[0]) show(panes[0].id);
+}
+
 async function loadSection(id){
   const sec = document.getElementById(id);
   if (!sec) return;
   if (sec.dataset.loading === 'true') return;
   if (sec.dataset.loaded === 'true') {
-    if (id === 'projects') initAmbPhotoGrid();
+    if (id === 'projects') {
+      initProjectTabs();
+    }
     return;
   }
   const container = sec.querySelector('.content');
@@ -103,7 +128,7 @@ async function loadSection(id){
     const html = await resp.text();
     const sanitized = sanitizeHTML(html);
     container.innerHTML = sanitized;
-    if (id === 'projects') initAmbPhotoGrid();
+    if (id === 'projects') initProjectTabs();
     sec.dataset.loaded = 'true';
   } catch (err) {
     container.innerHTML = `<p style="color:#c00">Failed to load content.</p>`;

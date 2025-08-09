@@ -148,9 +148,32 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   }
 }
+.photo-wrap {
+  overflow: hidden;
+}
 .photo-grid img {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   display: block;
+  transition: transform 0.2s ease;
+}
+.photo-wrap:hover img {
+  transform: scale(1.1);
+}
+/* Project switching */
+.project-pane {
+  display: none;
+  padding: 0;
+}
+.project-pane.active {
+  display: block;
+}
+.project-pane h3 {
+  margin: 0 0 16px 0;
+}
+.project-switch {
+  color: var(--projects-border);
+  cursor: pointer;
+  margin-left: 8px;
 }
