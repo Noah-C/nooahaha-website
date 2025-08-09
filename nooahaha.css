@@ -156,6 +156,7 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
     aspect-ratio: 1 / 1;
     object-fit: cover;
     display: block;
+    transition: transform 0.3s ease;
 }
 /* Retro project tabs */
 .projects-window {
