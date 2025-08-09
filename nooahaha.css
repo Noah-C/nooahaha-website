@@ -154,8 +154,6 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
     object-fit: cover;
     display: block;
 }
-<<<<<<< HEAD
-
 /* Retro project tabs */
 .projects-window {
   border: 2px solid #808080;
@@ -168,6 +166,7 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
 }
 .project-tab {
   padding: 2px 8px;
+
   background: #c0c0c0;
   border: 2px solid;
   border-color: #fff #808080 #808080 #fff;

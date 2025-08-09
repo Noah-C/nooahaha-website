@@ -89,6 +89,7 @@ async function initAmbPhotoGrid(){
     console.error(err);
   }
 }
+
 function initProjectTabs(){
   const container = document.querySelector('.projects-window');
   if (!container || container.dataset.inited) return;
@@ -107,6 +108,7 @@ function initProjectTabs(){
     tab.addEventListener('click', () => show(tab.dataset.target));
   });
   if (tabs[0]) show(tabs[0].dataset.target);
+
 }
 
 async function loadSection(id){
@@ -115,6 +117,7 @@ async function loadSection(id){
   if (sec.dataset.loading === 'true') return;
   if (sec.dataset.loaded === 'true') {
     if (id === 'projects') {
+
       initProjectTabs();
     }
     return;
