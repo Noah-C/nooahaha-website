@@ -148,20 +148,27 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   }
 }
+/* Individual photo container */
 .photo-wrap {
   overflow: hidden;
+  position: relative;
+}
+/* Allow hovered photos to expand beyond the grid */
+.photo-wrap:hover {
+  overflow: visible;
+  z-index: 10;
 }
 .photo-grid img {
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     display: block;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, object-fit 0.3s ease;
 }
 /* Retro project tabs */
 .projects-window {
-  border: 2px solid #808080;
   background: #fff;
+  border: none;
 }
 .project-tabs {
   display: flex;
@@ -193,8 +200,11 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   display: block;
   transition: transform 0.2s ease;
 }
+/* Enlarge and reveal full photo on hover */
 .photo-wrap:hover img {
   transform: scale(1.1);
+  object-fit: contain;
+  aspect-ratio: auto;
 }
 /* Project switching */
 .project-pane {
@@ -208,7 +218,7 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   margin: 0 0 16px 0;
 }
 .project-switch {
-  color: var(--projects-border);
+  color: inherit;
   cursor: pointer;
   margin-left: 8px;
 }
