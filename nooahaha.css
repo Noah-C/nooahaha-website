@@ -51,6 +51,7 @@ noscript { display: none; }
   color: var(--border);
   cursor: pointer;
   padding: 0;
+  z-index: 10;
 }
 .win-close:hover { color: #bfbfbf; }
 .win-close:active { transform: translate(1px,1px); }
