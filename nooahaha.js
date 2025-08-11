@@ -195,21 +195,20 @@ function initWindowControls(){
           clearTimeout(safetyShowOverlay);
         }
       };
-
-      // Trigger burst exactly when scale transition completes
+      // After the heart grows, let it keep beating briefly before bursting
+      const HOLD_MS = 2200; // time to keep beating after growth
       wrap.addEventListener('transitionend', (e) => {
-        if (e.propertyName === 'transform') doBurst();
+        if (e.propertyName === 'transform') {
+          setTimeout(doBurst, HOLD_MS);
+        }
       }, { once: true });
       // Fallback in case transitionend doesn’t fire
-      const burstFallback = setTimeout(doBurst, 2100);
+      const burstFallback = setTimeout(doBurst, HOLD_MS + 800);
 
-      // Smoothly scale the wrapper up while the heart keeps beating
+      // Grow the heart quickly while it continues beating
       requestAnimationFrame(() => {
-        wrap.style.transform = 'translate(-50%, -50%) scale(1)';
-        requestAnimationFrame(() => {
-          wrap.style.transform = 'translate(-50%, -50%) scale(2.1)';
-          console.log('[close] heart scaling');
-        });
+        wrap.style.transform = 'translate(-50%, -50%) scale(2.1)';
+        console.log('[close] heart scaling');
       });
     }, 380); // shrink duration
   });
