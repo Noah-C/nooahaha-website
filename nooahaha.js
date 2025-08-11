@@ -207,8 +207,12 @@ function initWindowControls(){
 
       // Grow the heart quickly while it continues beating
       requestAnimationFrame(() => {
-        wrap.style.transform = 'translate(-50%, -50%) scale(2.1)';
-        console.log('[close] heart scaling');
+        // ensure starting scale is registered before growing
+        wrap.style.transform = 'translate(-50%, -50%) scale(1)';
+        requestAnimationFrame(() => {
+          wrap.style.transform = 'translate(-50%, -50%) scale(2.1)';
+          console.log('[close] heart scaling');
+        });
       });
     }, 380); // shrink duration
   });
