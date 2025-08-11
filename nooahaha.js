@@ -109,6 +109,142 @@ function initProjectTabs(){
   });
   if (panes[0]) show(panes[0].id);
 }
+function initTalkTabs(){
+  const container = document.querySelector('.talks-window');
+  if (!container || container.dataset.inited) return;
+  container.dataset.inited = 'true';
+  const panes = container.querySelectorAll('.project-pane');
+  const switches = container.querySelectorAll('.project-switch');
+  function show(id){
+    panes.forEach(p => p.classList.toggle('active', p.id === id));
+  }
+  switches.forEach(sw => sw.addEventListener('click', () => show(sw.dataset.target)));
+  if (panes[0]) show(panes[0].id);
+}
+function initWindowControls(){
+  const screen = document.querySelector('.screen');
+  const btnClose = document.querySelector('.win-close');
+  if (!screen || !btnClose) return;
+  if (screen.dataset.bound) return; screen.dataset.bound = 'true';
+
+  function cleanScreenState(){
+    screen.classList.remove('is-minimizing');
+    screen.style.transformOrigin = '';
+    screen.style.transition = '';
+    screen.style.transform = '';
+    screen.style.opacity = '';
+  }
+
+  btnClose.addEventListener('click', () => {
+    console.log('[close] clicked');
+    cleanScreenState();
+    // Shrink the screen to dot quickly then show centered heart
+    screen.classList.add('is-minimizing');
+    const safetyShowOverlay = setTimeout(() => {
+      if (!document.querySelector('.blank-world-overlay')) {
+        console.warn('[close] safety fallback: showing overlay');
+        showBlankWorldMessage();
+      }
+    }, 2600);
+    setTimeout(() => {
+      screen.style.display = 'none';
+      // Create centered beating heart inside a wrapper we can scale
+      const wrap = document.createElement('div');
+      wrap.className = 'heart-wrap';
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      wrap.appendChild(heart);
+      document.body.appendChild(wrap);
+      console.log('[close] heart shown');
+
+      // Smoothly scale the wrapper up while the heart keeps beating
+      requestAnimationFrame(() => {
+        wrap.style.transform = 'translate(-50%, -50%) scale(1)';
+        // Next frame, begin scale up over ~1.6s (slightly faster)
+        requestAnimationFrame(() => {
+          wrap.style.transform = 'translate(-50%, -50%) scale(2.1)';
+          console.log('[close] heart scaling');
+        });
+      });
+
+      // After growth completes, burst into dots
+      setTimeout(() => {
+        try {
+          const rect = wrap.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          wrap.remove();
+          console.log('[close] heart burst start');
+          // Burst dots
+          const total = 28;
+          for (let i = 0; i < total; i++) {
+            const d = document.createElement('div');
+            d.className = 'burst-dot' + (i % 3 === 0 ? ' light' : '');
+            d.style.left = `${cx}px`;
+            d.style.top = `${cy}px`;
+            document.body.appendChild(d);
+            requestAnimationFrame(() => {
+              const deg = (360 / total) * i + (Math.random() * 24 - 12);
+              const rad = deg * Math.PI / 180;
+              const dist = 60 + Math.random() * 90;
+              d.style.transform = `translate(${Math.cos(rad)*dist}px, ${Math.sin(rad)*dist}px) scale(${0.5 + Math.random()*0.4})`;
+              d.style.opacity = '0';
+            });
+            setTimeout(() => d.remove(), 700);
+          }
+
+          // After burst, show typewriter message overlay
+          setTimeout(() => {
+            console.log('[close] showing overlay');
+            showBlankWorldMessage();
+            clearTimeout(safetyShowOverlay);
+          }, 200);
+        } catch (e) {
+          console.error('[close] burst failed', e);
+          showBlankWorldMessage();
+          clearTimeout(safetyShowOverlay);
+        }
+      }, 1700); // ~1.6s growth + buffer
+    }, 380); // shrink duration
+  });
+}
+
+function showBlankWorldMessage(){
+  console.log('[overlay] create');
+  // Reuse typing speeds from typewriter.js
+  const SPEED = 15; // per char
+  const PUNCT_PAUSE = 150;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'blank-world-overlay';
+  overlay.style.cssText = `
+    position: fixed; inset: 0; background: #fff; z-index: 10000;
+    display: flex; align-items: center; justify-content: center;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+    color: #111; padding: 24px; text-align: center;
+  `;
+  const container = document.createElement('div');
+  container.style.maxWidth = '800px';
+  const p = document.createElement('p');
+  p.style.margin = '0';
+  p.style.fontSize = '22px';
+  overlay.appendChild(container);
+  container.appendChild(p);
+  document.body.appendChild(overlay);
+
+  const message = "Now you've reached a blank world without Yedong.";
+  let i = 0;
+  function typeNext(){
+    if (i >= message.length) { console.log('[overlay] typed complete'); return; }
+    p.textContent += message[i];
+    let delay = SPEED;
+    if (/[.,!?;:—–]/.test(message[i])) delay += PUNCT_PAUSE;
+    i++;
+    setTimeout(typeNext, delay);
+  }
+  // Start typing next frame
+  requestAnimationFrame(typeNext);
+}
 async function loadSection(id){
   const sec = document.getElementById(id);
   if (!sec) return;
@@ -116,6 +252,8 @@ async function loadSection(id){
   if (sec.dataset.loaded === 'true') {
     if (id === 'projects') {
       initProjectTabs();
+    } else if (id === 'talks') {
+      initTalkTabs();
     }
     return;
   }
@@ -129,6 +267,7 @@ async function loadSection(id){
     const sanitized = sanitizeHTML(html);
     container.innerHTML = sanitized;
     if (id === 'projects') initProjectTabs();
+    if (id === 'talks') initTalkTabs();
     sec.dataset.loaded = 'true';
   } catch (err) {
     container.innerHTML = `<p style="color:#c00">Failed to load content.</p>`;
@@ -152,4 +291,5 @@ function showRoute(hash){
 }
 window.addEventListener('hashchange', () => showRoute(location.hash));
 window.addEventListener('resize', () => updateNavIndicator(CURRENT_ROUTE_ID));
-showRoute(location.hash || '#about'); 
+showRoute(location.hash || '#about');
+initWindowControls(); 

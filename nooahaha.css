@@ -35,6 +35,35 @@ noscript { display: none; }
   display: flex;
   flex-direction: column;
 }
+/* Close button (X) */
+.win-close {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 28px;
+  height: 28px;
+  line-height: 24px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 22px;
+  border: none;
+  background: transparent;
+  color: var(--border);
+  cursor: pointer;
+  padding: 0;
+}
+.win-close:hover { color: #bfbfbf; }
+.win-close:active { transform: translate(1px,1px); }
+
+/* Shrink animation when minimizing */
+.screen.is-minimizing {
+  animation: shrink-to-dot 450ms ease-in forwards;
+}
+@keyframes shrink-to-dot {
+  0% { transform: scale(1); opacity: 1; }
+  80% { transform: scale(0.02); opacity: 1; }
+  100% { transform: scale(0.02); opacity: 0; }
+}
 
 @media (max-width: 600px) {
   .screen {
@@ -171,41 +200,6 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   transform: translate(-50%, -50%);
   transform-origin: center center;
 }
-/* Retro project tabs */
-.projects-window {
-  background: #fff;
-  border: none;
-}
-.project-tabs {
-  display: flex;
-  background: #c0c0c0;
-  border-bottom: 2px solid #808080;
-}
-.project-tab {
-  padding: 2px 8px;
-
-  background: #c0c0c0;
-  border: 2px solid;
-  border-color: #fff #808080 #808080 #fff;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 14px;
-}
-.project-tab.active {
-  background: #e0e0e0;
-  border-bottom-color: #e0e0e0;
-}
-.project-tab:active {
-  border-color: #808080 #fff #fff #808080;
-}
-.project-pane {
-  display: none;
-  padding: 16px;
-}
-.project-pane.active {
-  display: block;
-  transition: transform 0.2s ease;
-}
 /* Enlarge and reveal full photo on hover */
 .photo-wrap:hover img {
   transform: translate(-50%, -50%) scale(2);
@@ -216,9 +210,7 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   display: none;
   padding: 0;
 }
-.project-pane.active {
-  display: block;
-}
+.project-pane.active { display: block; }
 .project-pane h3 {
   margin: 0 0 16px 0;
 }
@@ -227,6 +219,75 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   cursor: pointer;
   margin-left: 8px;
 }
-.project-pane h3 {
-  margin: 0 0 16px 0;
+
+/* Heart burst */
+/* removed old fixed-position .heart rules in favor of .heart-wrap + .heart */
+/* Heart shape and animation are now defined at the end of file */
+
+/* Heart movement and transitions */
+.heart {
+  transition: left 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              top 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              transform 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.heart.shake { animation: heart-shake 2s ease; }
+@keyframes heart-shake {
+  0%, 100% { transform: rotate(-45deg) scale(2) translate(0, 0); }
+  20% { transform: rotate(-45deg) scale(2) translate(1px, -1px); }
+  40% { transform: rotate(-45deg) scale(2) translate(-1px, 1px); }
+  60% { transform: rotate(-45deg) scale(2) translate(1px, 1px); }
+  80% { transform: rotate(-45deg) scale(2) translate(-1px, -1px); }
+}
+
+/* Red burst dots */
+.burst-dot {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff2b2b;
+  opacity: 1;
+  z-index: 9999;
+  transform: translate(0,0) scale(1);
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1), opacity 560ms ease;
+}
+.burst-dot.light { background: #ff6b6b; width: 4px; height: 4px; }
+
+/* Centered heart wrapper for beating and growth */
+.heart-wrap {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  z-index: 9999;
+  transition: transform 1800ms ease-in-out;
+}
+
+/* Heart shape */
+.heart {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  background: #ff0000;
+  transform: rotate(-45deg);
+  animation: heart-beat 700ms ease-in-out infinite;
+}
+.heart::before,
+.heart::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: #ff0000;
+  border-radius: 50%;
+}
+.heart::before { top: -11px; left: 0; }
+.heart::after  { top: 0; left: 11px; }
+
+@keyframes heart-beat {
+  0%, 100% { transform: rotate(-45deg) scale(1); }
+  25%      { transform: rotate(-45deg) scale(1.12); }
+  50%      { transform: rotate(-45deg) scale(1); }
+  75%      { transform: rotate(-45deg) scale(1.08); }
 }
