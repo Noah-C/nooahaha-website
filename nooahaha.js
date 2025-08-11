@@ -160,7 +160,7 @@ function initWindowControls(){
           const cx = rect.width ? rect.left + rect.width / 2 : window.innerWidth / 2;
           const cy = rect.height ? rect.top + rect.height / 2 : window.innerHeight / 2;
           wrap.remove();
-          const total = 32;
+          const total = 64;
           for (let i = 0; i < total; i++) {
             const d = document.createElement('div');
             d.className = 'float-dot' + (i % 3 === 0 ? ' light' : '');
@@ -177,8 +177,10 @@ function initWindowControls(){
             // Force a reflow to ensure the browser registers initial styles
             void d.offsetWidth;
             requestAnimationFrame(() => {
-              const driftX = Math.random() * 60 - 30;
-              const driftY = -(80 + Math.random() * 60);
+              const angle = Math.random() * Math.PI * 2;
+              const distance = 120 + Math.random() * 120;
+              const driftX = Math.cos(angle) * distance;
+              const driftY = Math.sin(angle) * distance;
               d.style.transform = `translate(${driftX}px, ${driftY}px) scale(${0.6 + Math.random()*0.4})`;
               d.style.opacity = '0';
             });
