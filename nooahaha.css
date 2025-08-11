@@ -255,8 +255,8 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   80% { transform: rotate(-45deg) scale(2) translate(-1px, -1px); }
 }
 
-/* Burst dots longer transition (2s total incl. delay) */
-.burst-dot {
+/* Floating dots that drift upward and fade */
+.float-dot {
   position: fixed;
   width: 6px;
   height: 6px;
@@ -266,9 +266,9 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   z-index: 9999;
   transform: translate(0,0) scale(1);
   will-change: transform, opacity;
-  transition: transform 1800ms cubic-bezier(0.22, 1, 0.36, 1), opacity 2000ms ease;
+  transition: transform 2500ms cubic-bezier(0.22, 1, 0.36, 1), opacity 2500ms ease;
 }
-.burst-dot.light { background: #ff6b6b; width: 4px; height: 4px; }
+.float-dot.light { background: #ff6b6b; width: 4px; height: 4px; }
 
 /* Centered heart wrapper for beating and growth */
 .heart-wrap {
