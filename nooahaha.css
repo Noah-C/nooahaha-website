@@ -135,12 +135,26 @@ main p { margin-bottom: 20px; }
 main {flex: 1}
 main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
 #writing li, #projects p, #talks li { margin-bottom: 28px; }
+/* Footer */
 .footer {
   margin-top: 36px;
   padding-top: 16px;
   border-top: 1px solid var(--border);
   font-size: 12px;
   opacity: 0.75;
+}
+/* Keep selection allowed, but remove highlight color in footer */
+.footer::selection, .footer *::selection {
+  background: transparent;
+  color: inherit;
+}
+/* Footer links should not appear blue or underlined */
+.footer a,
+.footer a:visited,
+.footer a:hover,
+.footer a:active {
+  color: inherit;
+  text-decoration: none;
 }
 .clicker {
   display: inline-block;
@@ -241,7 +255,7 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   80% { transform: rotate(-45deg) scale(2) translate(-1px, -1px); }
 }
 
-/* Red burst dots */
+/* Burst dots longer transition (2s total incl. delay) */
 .burst-dot {
   position: fixed;
   width: 6px;
@@ -251,7 +265,8 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   opacity: 1;
   z-index: 9999;
   transform: translate(0,0) scale(1);
-  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1), opacity 560ms ease;
+  will-change: transform, opacity;
+  transition: transform 1800ms cubic-bezier(0.22, 1, 0.36, 1), opacity 2000ms ease;
 }
 .burst-dot.light { background: #ff6b6b; width: 4px; height: 4px; }
 
@@ -262,7 +277,6 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   top: 50%;
   transform: translate(-50%, -50%) scale(1);
   z-index: 9999;
-  transition: transform 400ms ease-in-out;
 }
 
 /* Heart shape */
@@ -272,7 +286,7 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   height: 22px;
   background: #ff0000;
   transform: rotate(-45deg);
-  animation: heart-beat 1s ease-in-out infinite;
+  animation: heart-beat 700ms ease-in-out infinite;
 }
 .heart::before,
 .heart::after {
@@ -287,8 +301,7 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
 .heart::after  { top: 0; left: 11px; }
 
 @keyframes heart-beat {
-  0%, 40%, 100% { transform: rotate(-45deg) scale(1); }
-  10%          { transform: rotate(-45deg) scale(1.25); }
-  20%          { transform: rotate(-45deg) scale(1); }
-  30%          { transform: rotate(-45deg) scale(1.15); }
+  0%, 100% { transform: rotate(-45deg) scale(1); }
+  30%      { transform: rotate(-45deg) scale(1.06); }
+  60%      { transform: rotate(-45deg) scale(1.03); }
 }

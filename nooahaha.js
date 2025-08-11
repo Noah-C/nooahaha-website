@@ -135,86 +135,54 @@ function initWindowControls(){
     screen.style.opacity = '';
   }
 
+  // 4-step flow on X: shrink -> 3s heartbeat -> 2s+ burst -> typeout
   btnClose.addEventListener('click', () => {
-    console.log('[close] clicked');
     cleanScreenState();
-    // Shrink the screen to dot quickly then show centered heart
     screen.classList.add('is-minimizing');
     const safetyShowOverlay = setTimeout(() => {
-      if (!document.querySelector('.blank-world-overlay')) {
-        console.warn('[close] safety fallback: showing overlay');
-        showBlankWorldMessage();
-      }
-    }, 3200);
+      if (!document.querySelector('.blank-world-overlay')) showBlankWorldMessage();
+    }, 7000);
     setTimeout(() => {
       screen.style.display = 'none';
-      // Create centered beating heart inside a wrapper we can scale
       const wrap = document.createElement('div');
       wrap.className = 'heart-wrap';
+      wrap.style.transform = 'translate(-50%, -50%) scale(2.1)';
       const heart = document.createElement('div');
       heart.className = 'heart';
       wrap.appendChild(heart);
       document.body.appendChild(wrap);
-      console.log('[close] heart shown');
 
-      let bursted = false;
-      const doBurst = () => {
-        if (bursted) return; bursted = true;
+      // Heartbeat for ~3 seconds
+      setTimeout(() => {
         try {
           const rect = wrap.getBoundingClientRect();
           const cx = rect.left + rect.width / 2;
           const cy = rect.top + rect.height / 2;
           wrap.remove();
-          console.log('[close] heart burst start');
-          // Burst dots
-          const total = 28;
+          const total = 32;
           for (let i = 0; i < total; i++) {
             const d = document.createElement('div');
             d.className = 'burst-dot' + (i % 3 === 0 ? ' light' : '');
             d.style.left = `${cx}px`;
             d.style.top = `${cy}px`;
             document.body.appendChild(d);
+            // Force a reflow to ensure the browser registers initial styles
+            void d.offsetWidth;
             requestAnimationFrame(() => {
-              const deg = (360 / total) * i + (Math.random() * 24 - 12);
+              const deg = (360 / total) * i + (Math.random() * 18 - 9);
               const rad = deg * Math.PI / 180;
-              const dist = 60 + Math.random() * 90;
+              const dist = 70 + Math.random() * 110;
               d.style.transform = `translate(${Math.cos(rad)*dist}px, ${Math.sin(rad)*dist}px) scale(${0.6 + Math.random()*0.4})`;
               d.style.opacity = '0';
             });
-            setTimeout(() => d.remove(), 900);
+            setTimeout(() => d.remove(), 2200);
           }
-          // After burst, show typewriter message overlay (wait until dots finish)
-          setTimeout(() => {
-            console.log('[close] showing overlay');
-            showBlankWorldMessage();
-            clearTimeout(safetyShowOverlay);
-          }, 950);
+          setTimeout(() => { showBlankWorldMessage(); clearTimeout(safetyShowOverlay); }, 2300);
         } catch (e) {
-          console.error('[close] burst failed', e);
-          showBlankWorldMessage();
-          clearTimeout(safetyShowOverlay);
+          showBlankWorldMessage(); clearTimeout(safetyShowOverlay);
         }
-      };
-      // After the heart grows, let it keep beating briefly before bursting
-      const HOLD_MS = 2200; // time to keep beating after growth
-      wrap.addEventListener('transitionend', (e) => {
-        if (e.propertyName === 'transform') {
-          setTimeout(doBurst, HOLD_MS);
-        }
-      }, { once: true });
-      // Fallback in case transitionend doesn’t fire
-      const burstFallback = setTimeout(doBurst, HOLD_MS + 800);
-
-      // Grow the heart quickly while it continues beating
-      requestAnimationFrame(() => {
-        // ensure starting scale is registered before growing
-        wrap.style.transform = 'translate(-50%, -50%) scale(1)';
-        requestAnimationFrame(() => {
-          wrap.style.transform = 'translate(-50%, -50%) scale(2.1)';
-          console.log('[close] heart scaling');
-        });
-      });
-    }, 380); // shrink duration
+      }, 3000);
+    }, 380);
   });
 }
 
