@@ -145,7 +145,7 @@ function initWindowControls(){
         console.warn('[close] safety fallback: showing overlay');
         showBlankWorldMessage();
       }
-    }, 2600);
+    }, 3200);
     setTimeout(() => {
       screen.style.display = 'none';
       // Create centered beating heart inside a wrapper we can scale
@@ -157,18 +157,9 @@ function initWindowControls(){
       document.body.appendChild(wrap);
       console.log('[close] heart shown');
 
-      // Smoothly scale the wrapper up while the heart keeps beating
-      requestAnimationFrame(() => {
-        wrap.style.transform = 'translate(-50%, -50%) scale(1)';
-        // Next frame, begin scale up over ~1.6s (slightly faster)
-        requestAnimationFrame(() => {
-          wrap.style.transform = 'translate(-50%, -50%) scale(2.1)';
-          console.log('[close] heart scaling');
-        });
-      });
-
-      // After growth completes, burst into dots
-      setTimeout(() => {
+      let bursted = false;
+      const doBurst = () => {
+        if (bursted) return; bursted = true;
         try {
           const rect = wrap.getBoundingClientRect();
           const cx = rect.left + rect.width / 2;
@@ -187,29 +178,48 @@ function initWindowControls(){
               const deg = (360 / total) * i + (Math.random() * 24 - 12);
               const rad = deg * Math.PI / 180;
               const dist = 60 + Math.random() * 90;
-              d.style.transform = `translate(${Math.cos(rad)*dist}px, ${Math.sin(rad)*dist}px) scale(${0.5 + Math.random()*0.4})`;
+              d.style.transform = `translate(${Math.cos(rad)*dist}px, ${Math.sin(rad)*dist}px) scale(${0.6 + Math.random()*0.4})`;
               d.style.opacity = '0';
             });
-            setTimeout(() => d.remove(), 700);
+            setTimeout(() => d.remove(), 900);
           }
-
-          // After burst, show typewriter message overlay
+          // After burst, show typewriter message overlay (wait until dots finish)
           setTimeout(() => {
             console.log('[close] showing overlay');
             showBlankWorldMessage();
             clearTimeout(safetyShowOverlay);
-          }, 200);
+          }, 950);
         } catch (e) {
           console.error('[close] burst failed', e);
           showBlankWorldMessage();
           clearTimeout(safetyShowOverlay);
         }
-      }, 1700); // ~1.6s growth + buffer
+      };
+
+      // Trigger burst exactly when scale transition completes
+      wrap.addEventListener('transitionend', (e) => {
+        if (e.propertyName === 'transform') doBurst();
+      }, { once: true });
+      // Fallback in case transitionend doesn’t fire
+      const burstFallback = setTimeout(doBurst, 2100);
+
+      // Smoothly scale the wrapper up while the heart keeps beating
+      requestAnimationFrame(() => {
+        wrap.style.transform = 'translate(-50%, -50%) scale(1)';
+        requestAnimationFrame(() => {
+          wrap.style.transform = 'translate(-50%, -50%) scale(2.1)';
+          console.log('[close] heart scaling');
+        });
+      });
     }, 380); // shrink duration
   });
 }
 
 function showBlankWorldMessage(){
+  if (document.querySelector('.blank-world-overlay')) {
+    console.warn('[overlay] already present; skipping duplicate');
+    return;
+  }
   console.log('[overlay] create');
   // Reuse typing speeds from typewriter.js
   const SPEED = 15; // per char
@@ -235,7 +245,14 @@ function showBlankWorldMessage(){
   const message = "Now you've reached a blank world without Yedong.";
   let i = 0;
   function typeNext(){
-    if (i >= message.length) { console.log('[overlay] typed complete'); return; }
+    if (!document.body.contains(overlay)) return; // overlay removed
+    if (i >= message.length) {
+      console.log('[overlay] typed complete');
+      const cursor = document.createElement('span');
+      cursor.className = 'clicker';
+      p.appendChild(cursor);
+      return;
+    }
     p.textContent += message[i];
     let delay = SPEED;
     if (/[.,!?;:—–]/.test(message[i])) delay += PUNCT_PAUSE;
