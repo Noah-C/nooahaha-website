@@ -156,13 +156,21 @@ function initWindowControls(){
       setTimeout(() => {
         try {
           const rect = wrap.getBoundingClientRect();
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top + rect.height / 2;
+          // Fallback to viewport center if the rect is zero-sized (e.g. race condition)
+          const cx = rect.width ? rect.left + rect.width / 2 : window.innerWidth / 2;
+          const cy = rect.height ? rect.top + rect.height / 2 : window.innerHeight / 2;
           wrap.remove();
           const total = 32;
           for (let i = 0; i < total; i++) {
             const d = document.createElement('div');
             d.className = 'burst-dot' + (i % 3 === 0 ? ' light' : '');
+            // Inline fallback styles so dots remain visible even if CSS hasn't loaded yet
+            d.style.cssText = `position:fixed;width:6px;height:6px;border-radius:50%;background:#ff2b2b;opacity:1;z-index:9999;transform:translate(0,0) scale(1);transition:transform 1800ms cubic-bezier(0.22,1,0.36,1),opacity 2000ms ease;`;
+            if (i % 3 === 0) {
+              d.style.background = '#ff6b6b';
+              d.style.width = '4px';
+              d.style.height = '4px';
+            }
             d.style.left = `${cx}px`;
             d.style.top = `${cy}px`;
             document.body.appendChild(d);
