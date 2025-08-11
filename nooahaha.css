@@ -262,7 +262,7 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   top: 50%;
   transform: translate(-50%, -50%) scale(1);
   z-index: 9999;
-  transition: transform 1800ms ease-in-out;
+  transition: transform 400ms ease-in-out;
 }
 
 /* Heart shape */
@@ -272,7 +272,7 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   height: 22px;
   background: #ff0000;
   transform: rotate(-45deg);
-  animation: heart-beat 700ms ease-in-out infinite;
+  animation: heart-beat 1s ease-in-out infinite;
 }
 .heart::before,
 .heart::after {
@@ -287,8 +287,8 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
 .heart::after  { top: 0; left: 11px; }
 
 @keyframes heart-beat {
-  0%, 100% { transform: rotate(-45deg) scale(1); }
-  25%      { transform: rotate(-45deg) scale(1.12); }
-  50%      { transform: rotate(-45deg) scale(1); }
-  75%      { transform: rotate(-45deg) scale(1.08); }
+  0%, 40%, 100% { transform: rotate(-45deg) scale(1); }
+  10%          { transform: rotate(-45deg) scale(1.25); }
+  20%          { transform: rotate(-45deg) scale(1); }
+  30%          { transform: rotate(-45deg) scale(1.15); }
 }
