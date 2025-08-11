@@ -135,7 +135,7 @@ function initWindowControls(){
     screen.style.opacity = '';
   }
 
-  // 4-step flow on X: shrink -> 3s heartbeat -> 2s+ burst -> typeout
+  // 4-step flow on X: shrink -> 3s heartbeat -> 2s+ float -> typeout
   btnClose.addEventListener('click', () => {
     cleanScreenState();
     screen.classList.add('is-minimizing');
@@ -163,9 +163,9 @@ function initWindowControls(){
           const total = 32;
           for (let i = 0; i < total; i++) {
             const d = document.createElement('div');
-            d.className = 'burst-dot' + (i % 3 === 0 ? ' light' : '');
+            d.className = 'float-dot' + (i % 3 === 0 ? ' light' : '');
             // Inline fallback styles so dots remain visible even if CSS hasn't loaded yet
-            d.style.cssText = `position:fixed;width:6px;height:6px;border-radius:50%;background:#ff2b2b;opacity:1;z-index:9999;transform:translate(0,0) scale(1);transition:transform 1800ms cubic-bezier(0.22,1,0.36,1),opacity 2000ms ease;`;
+            d.style.cssText = `position:fixed;width:6px;height:6px;border-radius:50%;background:#ff2b2b;opacity:1;z-index:9999;transform:translate(0,0) scale(1);transition:transform 2500ms cubic-bezier(0.22,1,0.36,1),opacity 2500ms ease;`;
             if (i % 3 === 0) {
               d.style.background = '#ff6b6b';
               d.style.width = '4px';
@@ -177,15 +177,14 @@ function initWindowControls(){
             // Force a reflow to ensure the browser registers initial styles
             void d.offsetWidth;
             requestAnimationFrame(() => {
-              const deg = (360 / total) * i + (Math.random() * 18 - 9);
-              const rad = deg * Math.PI / 180;
-              const dist = 70 + Math.random() * 110;
-              d.style.transform = `translate(${Math.cos(rad)*dist}px, ${Math.sin(rad)*dist}px) scale(${0.6 + Math.random()*0.4})`;
+              const driftX = Math.random() * 60 - 30;
+              const driftY = -(80 + Math.random() * 60);
+              d.style.transform = `translate(${driftX}px, ${driftY}px) scale(${0.6 + Math.random()*0.4})`;
               d.style.opacity = '0';
             });
-            setTimeout(() => d.remove(), 2200);
+            setTimeout(() => d.remove(), 2600);
           }
-          setTimeout(() => { showBlankWorldMessage(); clearTimeout(safetyShowOverlay); }, 2300);
+          setTimeout(() => { showBlankWorldMessage(); clearTimeout(safetyShowOverlay); }, 2700);
         } catch (e) {
           showBlankWorldMessage(); clearTimeout(safetyShowOverlay);
         }
