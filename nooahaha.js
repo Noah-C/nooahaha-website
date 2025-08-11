@@ -1,3 +1,40 @@
+function ecgValue(t, hr = 72){
+  const T0 = 60 / hr;
+  const phi = 2 * Math.PI * ((t / T0) % 1);
+  const params = [
+    [-0.90,  0.12, 0.10],
+    [-0.15, -0.05, 0.03],
+    [ 0.00,  1.00, 0.02],
+    [ 0.08, -0.15, 0.03],
+    [ 0.70,  0.35, 0.20],
+  ];
+  function wrapDelta(a, b){
+    const d = a - b;
+    return Math.atan2(Math.sin(d), Math.cos(d));
+  }
+  let y = 0;
+  for (const [ph, amp, wid] of params){
+    const d = wrapDelta(phi, ph);
+    y += amp * Math.exp(-(d * d) / (2 * wid * wid));
+  }
+  return y;
+}
+
+function startHeartBeat(el, baseline = 72){
+  const start = performance.now();
+  let raf;
+  function step(now){
+    const t = (now - start) / 1000;
+    const hr = baseline + 10 * Math.sin((2 * Math.PI * t) / 10);
+    const y = ecgValue(t, hr);
+    const scale = 1 + 0.3 * y;
+    el.style.transform = `rotate(-45deg) scale(${scale})`;
+    raf = requestAnimationFrame(step);
+  }
+  raf = requestAnimationFrame(step);
+  return () => cancelAnimationFrame(raf);
+}
+
 document.getElementById('year').textContent = new Date().getFullYear();
 const ROUTES = ["about", "writing", "projects", "talks"];
 let CURRENT_ROUTE_ID = 'about';
@@ -151,10 +188,12 @@ function initWindowControls(){
       heart.className = 'heart';
       wrap.appendChild(heart);
       document.body.appendChild(wrap);
+      const stopBeat = startHeartBeat(heart);
 
       // Heartbeat for ~3 seconds
       setTimeout(() => {
         try {
+          stopBeat();
           const rect = wrap.getBoundingClientRect();
           // Fallback to viewport center if the rect is zero-sized (e.g. race condition)
           const cx = rect.width ? rect.left + rect.width / 2 : window.innerWidth / 2;

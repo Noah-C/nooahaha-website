@@ -279,14 +279,13 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   z-index: 9999;
 }
 
-/* Heart shape */
+/* Heart shape (animation handled in JS) */
 .heart {
   position: relative;
   width: 22px;
   height: 22px;
   background: #ff0000;
   transform: rotate(-45deg);
-  animation: heart-beat 1s ease-in-out infinite;
 }
 .heart::before,
 .heart::after {
@@ -299,15 +298,3 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
 }
 .heart::before { top: -11px; left: 0; }
 .heart::after  { top: 0; left: 11px; }
-
-@keyframes heart-beat {
-  0%   { transform: rotate(-45deg) scale(1); }
-  5%   { transform: rotate(-45deg) scale(1.08) translate(1px, -1px); }
-  10%  { transform: rotate(-45deg) scale(1.08) translate(-1px, 1px); }
-  15%  { transform: rotate(-45deg) scale(1); }
-  20%  { transform: rotate(-45deg) scale(1.4); }
-  35%  { transform: rotate(-45deg) scale(1); }
-  40%  { transform: rotate(-45deg) scale(1.15) translate(-1px, 1px); }
-  45%  { transform: rotate(-45deg) scale(1) translate(0, 0); }
-  100% { transform: rotate(-45deg) scale(1); }
-}
