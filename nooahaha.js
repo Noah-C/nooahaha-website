@@ -36,7 +36,8 @@ function startHeartBeat(el, baseline = 72){
   return () => cancelAnimationFrame(raf);
 }
 
-document.getElementById('year').textContent = new Date().getFullYear();
+const yearEl = document.getElementById('year');
+if (yearEl) yearEl.textContent = new Date().getFullYear();
 const ROUTES = ["about", "writing", "projects", "talks"];
 let CURRENT_ROUTE_ID = 'about';
 function updateNavIndicator(id){
@@ -343,4 +344,6 @@ function showRoute(hash){
 window.addEventListener('hashchange', () => showRoute(location.hash));
 window.addEventListener('resize', () => updateNavIndicator(CURRENT_ROUTE_ID));
 showRoute(location.hash || '#about');
-initWindowControls(); 
+initWindowControls();
+initProjectTabs();
+initTalkTabs();
