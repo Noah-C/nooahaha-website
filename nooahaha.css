@@ -220,6 +220,30 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   transform: translate(-50%, -50%) scale(2);
   object-fit: contain;
 }
+/* Project grid */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 16px;
+  padding: 0;
+  margin: 0;
+}
+
+.project-card {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 4px;
+}
+
+.project-card:hover {
+  opacity: 0.8;
+}
+
+.card-amb { background: #ffa417; }
+.card-rhythm { background: #ff5a3c; }
+.card-ealc { background: #3ce1ff; }
+
 /* Project switching */
 .project-pane {
   display: none;
