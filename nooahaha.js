@@ -62,7 +62,12 @@ function updateNavIndicator(id){
 function sanitizeHTML(html){
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
-  const allowed = new Set(['p','a','em','strong','span','ul','ol','li','h1','h2','h3','h4','h5','h6','br','div','img','button']);
+  const allowed = new Set([
+    'p','a','em','strong','span','ul','ol','li','h1','h2','h3','h4','h5','h6',
+    'br','div','img','button','iframe'
+  ]);
+  const globalAttrs = new Set(['href','target','rel','class','id','src','alt','loading']);
+  const iframeAttrs = new Set(['src','title','allow','frameborder','referrerpolicy','allowfullscreen','width','height']);
   const walker = document.createTreeWalker(doc.body, NodeFilter.SHOW_ELEMENT);
   const toRemove = [];
   while (walker.nextNode()){
@@ -73,8 +78,11 @@ function sanitizeHTML(html){
       const name = attr.name.toLowerCase();
       if (name === 'href' && tag === 'a') {
         if (/^javascript:/i.test(attr.value)) el.removeAttribute(attr.name);
-      } else if (name.startsWith('on') || !(name.startsWith('data-') || ['href','target','rel','class','id','src','alt','loading'].includes(name))) {
-        el.removeAttribute(attr.name);
+      } else {
+        const allowedAttr = name.startsWith('data-') || globalAttrs.has(name) || (tag === 'iframe' && iframeAttrs.has(name));
+        if (name.startsWith('on') || !allowedAttr) {
+          el.removeAttribute(attr.name);
+        }
       }
     });
     if (tag === 'a' && el.target === '_blank' && !el.rel) {
