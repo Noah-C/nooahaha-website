@@ -29,6 +29,7 @@ function startHeartBeat(el, baseline = 72){
     const y = ecgValue(t, hr);
     const scale = 1 + 0.3 * y;
     el.style.transform = `rotate(-45deg) scale(${scale})`;
+    el.style.webkitTransform = `rotate(-45deg) scale(${scale})`;
     raf = requestAnimationFrame(step);
   }
   raf = requestAnimationFrame(step);
@@ -51,6 +52,7 @@ function updateNavIndicator(id){
   indicator.style.width = `${linkRect.width}px`;
   indicator.style.height = `${linkRect.height}px`;
   indicator.style.transform = `translate(${x}px, ${y}px)`;
+  indicator.style.webkitTransform = `translate(${x}px, ${y}px)`;
   const root = getComputedStyle(document.documentElement);
   const colorVar = id === 'about' ? '--about-border' : id === 'writing' ? '--writing-border' : id === 'projects' ? '--projects-border' : '--talks-border';
   const color = root.getPropertyValue(colorVar).trim() || '#000';
@@ -167,8 +169,11 @@ function initWindowControls(){
   function cleanScreenState(){
     screen.classList.remove('is-minimizing');
     screen.style.transformOrigin = '';
+    screen.style.webkitTransformOrigin = '';
     screen.style.transition = '';
+    screen.style.webkitTransition = '';
     screen.style.transform = '';
+    screen.style.webkitTransform = '';
     screen.style.opacity = '';
   }
 
@@ -184,6 +189,7 @@ function initWindowControls(){
       const wrap = document.createElement('div');
       wrap.className = 'heart-wrap';
       wrap.style.transform = 'translate(-50%, -50%) scale(2.1)';
+      wrap.style.webkitTransform = 'translate(-50%, -50%) scale(2.1)';
       const heart = document.createElement('div');
       heart.className = 'heart';
       wrap.appendChild(heart);
@@ -204,7 +210,7 @@ function initWindowControls(){
             const d = document.createElement('div');
             d.className = 'float-dot' + (i % 3 === 0 ? ' light' : '');
             // Inline fallback styles so dots remain visible even if CSS hasn't loaded yet
-            d.style.cssText = `position:fixed;width:6px;height:6px;border-radius:50%;background:#ff2b2b;opacity:1;z-index:9999;transform:translate(0,0) scale(1);transition:transform 2500ms cubic-bezier(0.22,1,0.36,1),opacity 2500ms ease;`;
+            d.style.cssText = `position:fixed;width:6px;height:6px;border-radius:50%;background:#ff2b2b;opacity:1;z-index:9999;-webkit-transform:translate(0,0) scale(1);transform:translate(0,0) scale(1);-webkit-transition:-webkit-transform 2500ms cubic-bezier(0.22,1,0.36,1),opacity 2500ms ease;transition:transform 2500ms cubic-bezier(0.22,1,0.36,1),opacity 2500ms ease;`;
             if (i % 3 === 0) {
               d.style.background = '#ff6b6b';
               d.style.width = '4px';
@@ -221,6 +227,7 @@ function initWindowControls(){
               const driftX = Math.cos(angle) * distance;
               const driftY = Math.sin(angle) * distance;
               d.style.transform = `translate(${driftX}px, ${driftY}px) scale(${0.6 + Math.random()*0.4})`;
+              d.style.webkitTransform = `translate(${driftX}px, ${driftY}px) scale(${0.6 + Math.random()*0.4})`;
               d.style.opacity = '0';
             });
             setTimeout(() => d.remove(), 2600);
