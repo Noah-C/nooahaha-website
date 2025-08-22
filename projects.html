@@ -1,5 +1,28 @@
-<div class="projects-grid">
-  <a href="./Projects/amb.html" class="project-card card-amb" aria-label="Anderson Memorial Bridge"></a>
-  <a href="./Projects/rhythm.html" class="project-card card-rhythm" aria-label="Rhythm of COVID-19"></a>
-  <a href="./Projects/ealc.html" class="project-card card-ealc" aria-label="EALC Teaching Tips"></a>
+<div class="projects-window">
+  <div class="project-pane active" id="overview">
+    <div class="projects-grid">
+      <div class="project-card card-amb project-switch" data-target="amb">Anderson Memorial Bridge</div>
+      <div class="project-card card-rhythm project-switch" data-target="rhythm">Rhythm of COVID-19</div>
+      <div class="project-card card-ealc project-switch" data-target="ealc">EALC Teaching Tips</div>
+    </div>
+  </div>
+
+  <div class="project-pane" id="amb">
+    <h3>Anderson Memorial Bridge <span class="project-switch" data-target="overview">&lt;&lt;&lt;</span></h3>
+    <p>Since mid-summer 2018, I lived across the Charles River and crossed the John W. Weeks Footbridge almost every day to reach Harvard’s main campus. At some point — I can’t recall exactly when — I began to pause at the footbridge’s center line, photographing the bridge beside it, which I later learned was the Anderson Memorial Bridge.</p>
+    <p>Until the pandemic, when I moved away, I took more than two hundred images from this fixed vantage point, each preserving a fragment of light, weather, and season. Together they form a quiet chronicle of a place both constant and ever-changing.</p>
+    <p>You can refresh the page to see a different set of photos.</p>
+    <div class="photo-grid" id="amb-photo-grid"></div>
+  </div>
+
+  <div class="project-pane" id="rhythm">
+    <h3>Rhythm of COVID-19 <span class="project-switch" data-target="overview">&lt;&lt;&lt;</span></h3>
+    <p>An audio-visual exploration of pandemic data rhythms.</p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/Y2VuTiXkNII?si=QItinsFk2gJAbr9Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </div>
+
+  <div class="project-pane" id="ealc">
+    <h3>EALC Teaching Tips <span class="project-switch" data-target="overview">&lt;&lt;&lt;</span></h3>
+    <p><a href="https://noah-c.github.io/Harvard-EALC-Teaching-TIps/" target="_blank" rel="noopener noreferrer">Visit the EALC Teaching Tips site</a>.</p>
+  </div>
 </div>

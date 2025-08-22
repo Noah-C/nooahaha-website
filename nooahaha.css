@@ -230,19 +230,33 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
 }
 
 .project-card {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 4px;
+  background: #fff;
+  color: #000;
+  text-align: center;
+  border: 1px solid #000;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.project-card:hover {
-  opacity: 0.8;
+.card-amb:hover {
+  background: #ffa417;
+  color: #fff;
 }
 
-.card-amb { background: #ffa417; }
-.card-rhythm { background: #ff5a3c; }
-.card-ealc { background: #3ce1ff; }
+.card-rhythm:hover {
+  background: #ff5a3c;
+  color: #fff;
+}
+
+.card-ealc:hover {
+  background: #3ce1ff;
+  color: #000;
+}
 
 /* Project switching */
 .project-pane {
