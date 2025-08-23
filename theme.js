@@ -1,23 +1,26 @@
 (function() {
-  const key = "theme";
   const root = document.documentElement;
-  const link = document.getElementById("modeToggle");
-  if (!link) return;
+  const status = document.getElementById("modeStatus");
+  if (!status) return;
 
-  const system = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  const saved = localStorage.getItem(key);
-  const current = saved || system;
-  root.setAttribute("data-theme", current);
-  link.textContent = current === "dark" ? "Color Mode" : "Static Mode";
-  link.setAttribute("aria-label", current === "dark" ? "Activate static mode" : "Activate color mode");
+  function randomColor() {
+    let color = "#000000";
+    while (color === "#000000") {
+      color = `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0")}`;
+    }
+    return color;
+  }
 
-  link.addEventListener("click", function(e) {
-    e.preventDefault();
-    const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-    root.setAttribute("data-theme", next);
-    localStorage.setItem(key, next);
-    link.textContent = next === "dark" ? "Color Mode" : "Static Mode";
-    link.setAttribute("aria-label", next === "dark" ? "Activate static mode" : "Activate color mode");
+  let colorMode = false;
+  status.addEventListener("click", function() {
+    if (colorMode) {
+      root.style.setProperty("--bg", "#ffffff");
+      status.textContent = "STATIC MODE · v2.8.8";
+    } else {
+      const color = randomColor();
+      root.style.setProperty("--bg", color);
+      status.textContent = "COLOR MODE · v2.8.8";
+    }
+    colorMode = !colorMode;
   });
 })();
-
