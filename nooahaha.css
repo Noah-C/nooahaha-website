@@ -7,6 +7,7 @@
   --writing-border: #ff5a3c;
   --projects-border: #3ce1ff;
   --talks-border: #48ff40;
+  --screen-bg: #ffffff;
 }
 * { box-sizing: border-box; }
 html, body {
@@ -29,7 +30,7 @@ noscript { display: none; }
   border: 2px solid var(--border);
   border-radius: 8px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-  background: #fff;
+  background: var(--screen-bg);
   overflow: auto;
 
   display: flex;
@@ -94,6 +95,9 @@ noscript { display: none; }
   font-size: 13px;
   opacity: 0.7;
   text-align: right;
+}
+
+.status:hover {
   cursor: pointer;
 }
 nav {
