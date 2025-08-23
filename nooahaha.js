@@ -163,7 +163,13 @@ function initProjectTabs(){
   if (navLink) {
     navLink.addEventListener('click', () => show('overview'));
   }
-  if (panes[0]) show(panes[0].id);
+  const url = new URL(window.location);
+  const initial = url.searchParams.get('p');
+  if (initial && [...panes].some(p => p.id === initial)) {
+    show(initial);
+  } else if (panes[0]) {
+    show(panes[0].id);
+  }
 }
 function initTalkTabs(){
   const container = document.querySelector('.talks-window');
