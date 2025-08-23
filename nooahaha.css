@@ -94,6 +94,7 @@ noscript { display: none; }
   font-size: 13px;
   opacity: 0.7;
   text-align: right;
+  cursor: pointer;
 }
 nav {
   grid-column: 1 / -1;
