@@ -152,6 +152,10 @@ function initProjectTabs(){
   switches.forEach(sw => {
     sw.addEventListener('click', () => show(sw.dataset.target));
   });
+  const navLink = document.querySelector('nav a[href="#projects"]');
+  if (navLink) {
+    navLink.addEventListener('click', () => show('overview'));
+  }
   if (panes[0]) show(panes[0].id);
 }
 function initTalkTabs(){
