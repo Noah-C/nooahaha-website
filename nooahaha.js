@@ -159,13 +159,11 @@ function initProjectTabs(){
   switches.forEach(sw => {
     sw.addEventListener('click', () => show(sw.dataset.target));
   });
-  const params = new URLSearchParams(window.location.search);
-  const startId = params.get('p');
-  if (startId && [...panes].some(p => p.id === startId)) {
-    show(startId);
-  } else if (panes[0]) {
-    show(panes[0].id);
+  const navLink = document.querySelector('nav a[href="#projects"]');
+  if (navLink) {
+    navLink.addEventListener('click', () => show('overview'));
   }
+  if (panes[0]) show(panes[0].id);
 }
 function initTalkTabs(){
   const container = document.querySelector('.talks-window');
