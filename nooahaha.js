@@ -148,11 +148,24 @@ function initProjectTabs(){
       p.classList.toggle('active', active);
       if (active && p.id === 'amb') initAmbPhotoGrid();
     });
+    const url = new URL(window.location);
+    if (panes[0] && id === panes[0].id) {
+      url.searchParams.delete('p');
+    } else {
+      url.searchParams.set('p', id);
+    }
+    history.replaceState(null, '', url);
   }
   switches.forEach(sw => {
     sw.addEventListener('click', () => show(sw.dataset.target));
   });
-  if (panes[0]) show(panes[0].id);
+  const params = new URLSearchParams(window.location.search);
+  const startId = params.get('p');
+  if (startId && [...panes].some(p => p.id === startId)) {
+    show(startId);
+  } else if (panes[0]) {
+    show(panes[0].id);
+  }
 }
 function initTalkTabs(){
   const container = document.querySelector('.talks-window');
@@ -332,8 +345,15 @@ function showRoute(hash){
   CURRENT_ROUTE_ID = id;
   updateNavIndicator(id);
   loadSection(id);
+  if (id !== 'projects') {
+    const url = new URL(window.location);
+    if (url.searchParams.has('p')) {
+      url.searchParams.delete('p');
+      history.replaceState(null, '', url);
+    }
+  }
 }
 window.addEventListener('hashchange', () => showRoute(location.hash));
 window.addEventListener('resize', () => updateNavIndicator(CURRENT_ROUTE_ID));
 showRoute(location.hash || '#about');
-initWindowControls(); 
+initWindowControls();
