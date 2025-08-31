@@ -164,6 +164,7 @@ async function initPostersGrid(){
     const fragment = document.createDocumentFragment();
     const batchSize = 16;
     let index = 0;
+    const ric = window.requestIdleCallback ? window.requestIdleCallback : function(fn){ setTimeout(fn, 0); };
 
     function renderBatch(){
       const end = Math.min(index + batchSize, list.length);
@@ -185,7 +186,7 @@ async function initPostersGrid(){
       }
       container.appendChild(fragment);
       if (index < list.length) {
-        requestIdleCallback(renderBatch);
+        ric(renderBatch);
       } else {
         enableLightbox(container);
         container.dataset.loaded = 'true';
