@@ -1,0 +1,26 @@
+{
+  "name": "nooahaha-website",
+  "version": "1.0.0",
+  "main": "nooahaha.js",
+  "scripts": {
+    "posters:scan": "node scripts/update_posters_json.js",
+    "posters:thumbs": "node scripts/generate_posters_thumbs.js",
+    "posters:update": "npm run posters:scan && npm run posters:thumbs",
+    "serve": "python3 -m http.server 8000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Noah-C/nooahaha-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Noah-C/nooahaha-website/issues"
+  },
+  "homepage": "https://github.com/Noah-C/nooahaha-website#readme",
+  "description": "",
+  "devDependencies": {
+    "sharp": "^0.33.5"
+  }
+}

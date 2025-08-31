@@ -135,6 +135,93 @@ async function initAmbPhotoGrid(){
     console.error(err);
   }
 }
+async function initPostersGrid(){
+  const container = document.getElementById('posters-masonry');
+  if (!container) return;
+  if (container.dataset.loaded === 'true') return;
+  try {
+    // Prefer index with thumbnails if available; fallback to photos.json
+    const resp = await fetch('Projects/Posters/index.json', { cache: 'no-store' });
+    let list;
+    if (resp.ok) {
+      list = await resp.json();
+    } else {
+      const legacyResp = await fetch('Projects/Posters/photos.json', { cache: 'no-store' });
+      if (!legacyResp.ok) throw new Error('Failed to fetch posters list');
+      const files = await legacyResp.json();
+      list = (Array.isArray(files) ? files : []).filter(name => /\.(jpe?g|png|gif|webp)$/i.test(name)).map(name => ({
+        name,
+        full: `Projects/Posters/${encodeURIComponent(name)}`,
+        thumb: `Projects/Posters/${encodeURIComponent(name)}`,
+      }));
+    }
+
+    // Randomize order each time the page loads
+    if (Array.isArray(list) && list.length > 1) {
+      shuffle(list);
+    }
+    container.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+    const batchSize = 16;
+    let index = 0;
+
+    function renderBatch(){
+      const end = Math.min(index + batchSize, list.length);
+      for (; index < end; index++){
+        const item = list[index];
+        const wrap = document.createElement('div');
+        wrap.className = 'masonry-item';
+        const img = document.createElement('img');
+        // Use srcset for clearer previews on HiDPI screens
+        img.src = item.thumb || item.full;
+        if (item.thumb2x) {
+          img.srcset = `${item.thumb} 1x, ${item.thumb2x} 2x`;
+        }
+        img.alt = 'Poster image';
+        img.loading = 'lazy';
+        if (item.full) img.dataset.fullsrc = item.full;
+        wrap.appendChild(img);
+        fragment.appendChild(wrap);
+      }
+      container.appendChild(fragment);
+      if (index < list.length) {
+        requestIdleCallback(renderBatch);
+      } else {
+        enableLightbox(container);
+        container.dataset.loaded = 'true';
+      }
+    }
+    renderBatch();
+  } catch (err) {
+    console.error(err);
+  }
+}
+function enableLightbox(scope){
+  function close(){
+    const ov = document.querySelector('.lightbox-overlay');
+    if (ov) ov.remove();
+    document.removeEventListener('keydown', onKey);
+  }
+  function onKey(e){ if (e.key === 'Escape') close(); }
+  scope.addEventListener('click', (e) => {
+    const img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    const ov = document.createElement('div');
+    ov.className = 'lightbox-overlay';
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;cursor:zoom-out;';
+    const inner = document.createElement('div');
+    inner.style.cssText = 'max-width:90vw;max-height:90vh;';
+    const big = document.createElement('img');
+    big.src = img.dataset.fullsrc || img.src;
+    big.alt = img.alt || '';
+    big.style.cssText = 'max-width:100%;max-height:90vh;display:block;';
+    inner.appendChild(big);
+    ov.appendChild(inner);
+    ov.addEventListener('click', close);
+    document.body.appendChild(ov);
+    document.addEventListener('keydown', onKey);
+  });
+}
 function initProjectTabs(){
   const container = document.querySelector('.projects-window');
   if (!container || container.dataset.inited) return;
@@ -147,6 +234,7 @@ function initProjectTabs(){
       const active = p.id === id;
       p.classList.toggle('active', active);
       if (active && p.id === 'amb') initAmbPhotoGrid();
+      if (active && p.id === 'posters') initPostersGrid();
     });
     const url = new URL(window.location);
     if (panes[0] && id === panes[0].id) {
