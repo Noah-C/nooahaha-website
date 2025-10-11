@@ -311,7 +311,7 @@ main ul { margin-bottom: 20px; list-style: none; padding-left: 0; }
   color: #000;
 }
 
-.card-couple:hover {
+.card-compass:hover {
   background: #c073ff;
   color: #fff;
 }
