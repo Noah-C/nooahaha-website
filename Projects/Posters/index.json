@@ -182,5 +182,29 @@
     "thumb2x": "Projects/Posters/_thumbs/What%20is%20China%402x.webp",
     "width": 1200,
     "height": 1800
+  },
+  {
+    "name": "Wuxia FIlm Festival 1.png",
+    "full": "Projects/Posters/Wuxia%20FIlm%20Festival%201.png",
+    "thumb": "Projects/Posters/_thumbs/Wuxia%20FIlm%20Festival%201%401x.webp",
+    "thumb2x": "Projects/Posters/_thumbs/Wuxia%20FIlm%20Festival%201%402x.webp",
+    "width": 3300,
+    "height": 5100
+  },
+  {
+    "name": "Wuxia FIlm Festival 2.png",
+    "full": "Projects/Posters/Wuxia%20FIlm%20Festival%202.png",
+    "thumb": "Projects/Posters/_thumbs/Wuxia%20FIlm%20Festival%202%401x.webp",
+    "thumb2x": "Projects/Posters/_thumbs/Wuxia%20FIlm%20Festival%202%402x.webp",
+    "width": 3300,
+    "height": 5100
+  },
+  {
+    "name": "Wuxia FIlm Festival 3.png",
+    "full": "Projects/Posters/Wuxia%20FIlm%20Festival%203.png",
+    "thumb": "Projects/Posters/_thumbs/Wuxia%20FIlm%20Festival%203%401x.webp",
+    "thumb2x": "Projects/Posters/_thumbs/Wuxia%20FIlm%20Festival%203%402x.webp",
+    "width": 3300,
+    "height": 5100
   }
 ]
